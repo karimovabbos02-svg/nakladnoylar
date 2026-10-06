@@ -47,7 +47,7 @@ input:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid 
 .bd{display:inline-block;margin-left:8px;padding:1px 9px;border-radius:10px;font-size:.72rem;font-weight:600;background:var(--redbg);color:var(--red)}.bd.ok{background:rgba(31,157,85,.15);color:var(--ok)}
 .del{border:0;background:none;color:var(--mute);font-size:1.4rem;line-height:1;cursor:pointer;padding:0 4px}
 .empty{text-align:center;color:var(--mute);padding:40px 24px}
-.fab{position:fixed;right:max(16px,calc(50% - 224px));bottom:calc(20px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border-radius:50%;border:0;background:var(--pri);color:#fff;font-size:2rem;box-shadow:0 4px 14px rgba(0,0,0,.25);cursor:pointer}
+.fab{position:fixed;left:max(16px,calc(50% - 224px));bottom:calc(20px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border-radius:50%;border:0;background:var(--pri);color:#fff;font-size:2rem;box-shadow:0 4px 14px rgba(0,0,0,.25);cursor:pointer}
 dialog{border:0;border-radius:20px 20px 0 0;padding:16px;width:100%;max-width:480px;margin:auto auto 0;background:var(--card);color:var(--ink);max-height:92vh;overflow-y:auto}
 dialog::backdrop{background:rgba(0,0,0,.45)}
 .dh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.dh h2{margin:0;font-size:1.1rem;font-weight:600}
@@ -79,10 +79,17 @@ a.btn{display:block;text-align:center;text-decoration:none}.btn.tg{background:#2
  #list{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px;padding-top:12px;align-items:start}
  #list .card{margin:0}
  #list .card.empty{grid-column:1/-1}
- .fab{right:28px}
+ .fab{left:28px}
  dialog{margin:auto;border-radius:20px;max-width:560px}
 }
 @media (min-width:1500px){ .app{grid-template-columns:minmax(300px,360px) minmax(0,1fr)} #list{grid-template-columns:repeat(auto-fill,minmax(400px,1fr))} }
+
+dialog#dcal{margin:auto;border-radius:20px;max-width:340px;padding:14px}
+.cg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.cg b{font-size:.75rem;color:var(--mute);font-weight:500;padding:4px 0}
+.cg button{border:0;background:none;color:var(--ink);font:inherit;padding:10px 0;border-radius:10px;cursor:pointer}
+.cg button.td{box-shadow:inset 0 0 0 1.5px var(--pri)}
+.cg button.on{background:var(--pri);color:#fff}
 </style></head><body><div class="app">
 <header><h1>Накладнойларим</h1><button id="sh">🔗 Улашиш</button><button id="vm" style="display:none">Кўриш</button><button id="xl">Excel юклаш</button><button id="pm" style="display:none">👥 Рухсатлар</button><button id="lg">🔑 Таҳрирлаш учун кириш</button><button id="lo" style="display:none">Чиқиш</button></header>
 <div id="cloud">Уланмоқда...</div>
@@ -95,17 +102,17 @@ a.btn{display:block;text-align:center;text-decoration:none}.btn.tg{background:#2
 <div class="chips" id="chips">
  <button class="chip" data-per="today">Бугун</button><button class="chip" data-per="7">7 кун</button><button class="chip" data-per="month">Шу ой</button><button class="chip" data-per="range">Давр танлаш</button>
 </div>
-<div class="rng" id="rng"><input type="date" id="rf" aria-label="Бошланиш санаси"><input type="date" id="rt" aria-label="Тугаш санаси"></div>
+<div class="rng" id="rng"><input type="text" id="rf" aria-label="Бошланиш санаси"><input type="text" id="rt" aria-label="Тугаш санаси"></div>
 <input id="q" type="text" placeholder="Қидириш: маҳсулот, кимдан, кимга">
 <div class="info"><span id="ic"></span><span id="is"></span></div>
 </div>
-<div class="main"><div id="list"></div></div>
+<div class="main"><div id="list"></div><div style="text-align:center;color:var(--mute);font-size:.8rem;padding:18px 0 4px">Версия: 06.10.2026 · №4</div></div>
 <button class="fab" id="fab" aria-label="Янги накладной">+</button>
 </div>
 
 <dialog id="dlg">
  <div class="dh"><h2 id="dt">Янги накладной</h2><button class="del" id="cx" aria-label="Ёпиш">×</button></div>
- <div class="g2"><div><label>Тартиб рақами (№)<input id="no" type="number" min="1"></label></div><div><label>Сана<input id="d" type="date"></label></div></div>
+ <div class="g2"><div><label>Тартиб рақами (№)<input id="no" type="number" min="1"></label></div><div><label>Сана<input id="d" type="text"></label></div></div>
  <label>Кимдан<input id="fr" type="text"></label>
  <label>Кимга<input id="to" type="text"></label>
  <label>Ким олиб келди<input id="by" type="text"></label>
@@ -113,7 +120,7 @@ a.btn{display:block;text-align:center;text-decoration:none}.btn.tg{background:#2
  <button class="btn" id="addLn">+ Маҳсулот қатори</button>
  <div id="ft"></div>
  <button class="btn p" id="save">Сақлаш</button>
-</dialog><dialog id="dsh"><div class="dh"><h2>Ҳаволани улашиш</h2><button class="del" id="shx" aria-label="Ёпиш">×</button></div><p style="margin:0 0 10px;color:var(--mute);font-size:.88rem">Бу ҳавола орқали кирган ҳар ким ҳамма накладнойларни кўради ва Excel юклаб олади (ҳисоб шарт эмас). Таҳрирлаш фақат админда.</p><input id="shu" type="text" readonly aria-label="Ҳавола"><button class="btn p" id="shc">Нусха олиш</button><a class="btn tg" id="sht" target="_blank" rel="noopener">✈ Telegram орқали улашиш</a><button class="btn" id="shs" style="display:none">Бошқа иловада улашиш</button></dialog><dialog id="dlo"><div class="dh"><h2>Кириш ёки рухсат сўраш</h2><button class="del" id="lgX" aria-label="Ёпиш">×</button></div><label>Email<input id="lgE" type="email" autocomplete="username"></label><label>Парол (камида 6 та белги)<input id="lgP" type="password" autocomplete="current-password"></label><div id="lgErr" style="color:var(--red);font-size:.85rem;min-height:1.3em;margin-top:8px"></div><button class="btn p" id="lgIn">Кириш</button><button class="btn" id="lgUp">Рухсат сўраш (янги ҳисоб)</button><p style="margin:12px 0 0;color:var(--mute);font-size:.8rem">Админ бўлсангиз «Кириш»ни босинг. Бошқалар «Рухсат сўраш»ни босинг: ҳисоб очилади ва админга хабар боради. Админ тасдиқлагач таҳрирлай оласиз. Фақат кўриш учун ҳисоб керак эмас.</p></dialog><dialog id="dpm"><div class="dh"><h2>Рухсатлар</h2><button class="del" id="pmX" aria-label="Ёпиш">×</button></div><p style="margin:0 0 8px;color:var(--mute);font-size:.88rem">Таҳрирлаш учун рухсат сўраган одамлар шу ерда кўринади. «Рухсат бериш»ни босангиз, улар накладной қўша ва таҳрирлай олади (ўчира олмайди).</p><button class="btn" id="pmN">🔔 Браузер билдиришномасини ёқиш</button><div id="pmList"></div></dialog>
+</dialog><dialog id="dsh"><div class="dh"><h2>Ҳаволани улашиш</h2><button class="del" id="shx" aria-label="Ёпиш">×</button></div><p style="margin:0 0 10px;color:var(--mute);font-size:.88rem">Бу ҳавола орқали кирган ҳар ким ҳамма накладнойларни кўради ва Excel юклаб олади (ҳисоб шарт эмас). Таҳрирлаш фақат админда.</p><input id="shu" type="text" readonly aria-label="Ҳавола"><button class="btn p" id="shc">Нусха олиш</button><a class="btn tg" id="sht" target="_blank" rel="noopener">✈ Telegram орқали улашиш</a><button class="btn" id="shs" style="display:none">Бошқа иловада улашиш</button></dialog><dialog id="dlo"><div class="dh"><h2>Кириш ёки рухсат сўраш</h2><button class="del" id="lgX" aria-label="Ёпиш">×</button></div><label>Email<input id="lgE" type="email" autocomplete="username"></label><label>Парол (камида 6 та белги)<input id="lgP" type="password" autocomplete="current-password"></label><div id="lgErr" style="color:var(--red);font-size:.85rem;min-height:1.3em;margin-top:8px"></div><button class="btn p" id="lgIn">Кириш</button><button class="btn" id="lgUp">Рухсат сўраш (янги ҳисоб)</button><p style="margin:12px 0 0;color:var(--mute);font-size:.8rem">Админ бўлсангиз «Кириш»ни босинг. Бошқалар «Рухсат сўраш»ни босинг: ҳисоб очилади ва админга хабар боради. Админ тасдиқлагач таҳрирлай оласиз. Фақат кўриш учун ҳисоб керак эмас.</p></dialog><dialog id="dpm"><div class="dh"><h2>Рухсатлар</h2><button class="del" id="pmX" aria-label="Ёпиш">×</button></div><p style="margin:0 0 8px;color:var(--mute);font-size:.88rem">Таҳрирлаш учун рухсат сўраган одамлар шу ерда кўринади. «Рухсат бериш»ни босангиз, улар накладной қўша ва таҳрирлай олади (ўчира олмайди).</p><button class="btn" id="pmN">🔔 Браузер билдиришномасини ёқиш</button><div id="pmList"></div></dialog><dialog id="dcal"><div class="dh"><button class="del" id="calPrevY" aria-label="Олдинги йил">«</button><button class="del" id="calPrev" aria-label="Олдинги ой">‹</button><h2 id="calTitle" style="flex:1;text-align:center"></h2><button class="del" id="calNext" aria-label="Кейинги ой">›</button><button class="del" id="calNextY" aria-label="Кейинги йил">»</button></div><div class="cg" id="calGrid"></div><div style="display:flex;gap:8px;margin-top:10px"><button class="btn" id="calToday" style="margin:0">Бугун</button><button class="btn" id="calClear" style="margin:0">Тозалаш</button><button class="btn" id="calX" style="margin:0">Ёпиш</button></div></dialog>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
 <script>
@@ -151,7 +158,7 @@ a.btn{display:block;text-align:center;text-decoration:none}.btn.tg{background:#2
   }).sort(function(a,b){return (b.d||'').localeCompare(a.d||'')||b.no-a.no});
   current=rows; var sum=0; rows.forEach(function(x){sum+=total(x)});
   $('ic').textContent=rows.length+' та накладной'; $('is').innerHTML='Жами: <b>'+fmt(sum)+" сўм</b>";
-  if(!rows.length){ $('list').innerHTML='<div class="empty">Накладной топилмади.<br>Янгисини қўшиш учун пастдаги + тугмасини босинг.</div>'; return; }
+  if(!rows.length){ $('list').innerHTML='<div class="empty">Накладной топилмади.'+(editing()?'<br>Янгисини қўшиш учун пастдаги + тугмасини босинг.':'')+'</div>'; return; }
   $('list').innerHTML=rows.map(function(x){
    var h='<div class="card"><div class="top"><div><div class="ph">'+esc(x.to||'Номсиз')+'</div><div class="meta">№ '+esc(x.no)+' · '+dt(x.d)+'<span class="bd'+(x.ok?' ok':'')+'">'+(x.ok?'🔒 Ёпилган':'Очиқ')+'</span></div></div>'+(editing()&&!x.ok?'<div><button class="del" data-ed="'+x.id+'" aria-label="Таҳрирлаш">✎</button>'+(role==='owner'?'<button class="del" data-del="'+x.id+'" aria-label="Ўчириш">×</button>':'')+'</div>':'')+'</div>';
    if(x.from) h+='<div class="pill"><span>📍</span>'+esc(x.from)+'</div>';
@@ -400,6 +407,49 @@ a.btn{display:block;text-align:center;text-decoration:none}.btn.tg{background:#2
   try{ navigator.clipboard.writeText(SHARE_URL).then(ok,old); }catch(e){ old(); }
  };
  $('shs').onclick=function(){ try{ navigator.share({title:'Накладнойларим',url:SHARE_URL}).catch(function(){}); }catch(e){} };
+ var MN=['Январ','Феврал','Март','Апрел','Май','Июн','Июл','Август','Сентябр','Октябр','Ноябр','Декабр'], WD=['Дш','Сш','Чш','Пш','Жм','Шн','Як'];
+ var calEl=null, calY=0, calM=0, nativeSet=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set;
+ function p2(n){ return (n<10?'0':'')+n; }
+ function dateField(el){
+  el.readOnly=true; el.setAttribute('inputmode','none'); el.style.cursor='pointer'; el.placeholder='кк.оо.йййй';
+  Object.defineProperty(el,'value',{configurable:true,
+   get:function(){ return el.dataset.iso||''; },
+   set:function(v){ el.dataset.iso=v||''; nativeSet.call(el,v?String(v).split('-').reverse().join('.'):''); }});
+  el.addEventListener('click',function(){ openCal(el); });
+ }
+ function openCal(el){
+  calEl=el;
+  var v=el.value||iso(0), a=v.split('-');
+  calY=+a[0]; calM=+a[1]-1;
+  $('calClear').style.display=el.id==='d'?'none':'';
+  drawCal(); $('dcal').showModal();
+ }
+ function drawCal(){
+  $('calTitle').textContent=MN[calM]+' '+calY;
+  var off=(new Date(calY,calM,1).getDay()+6)%7, n=new Date(calY,calM+1,0).getDate(), sel=calEl.value, td=iso(0), h='';
+  WD.forEach(function(w){ h+='<b>'+w+'</b>'; });
+  for(var i=0;i<off;i++) h+='<span></span>';
+  for(var d=1;d<=n;d++){
+   var key=calY+'-'+p2(calM+1)+'-'+p2(d);
+   h+='<button type="button" data-day="'+key+'" class="'+(key===sel?'on ':'')+(key===td?'td':'')+'">'+d+'</button>';
+  }
+  $('calGrid').innerHTML=h;
+ }
+ function pickDate(v){
+  calEl.value=v;
+  calEl.dispatchEvent(new Event('input')); calEl.dispatchEvent(new Event('change'));
+  $('dcal').close();
+ }
+ function moveCal(dm){ calM+=dm; while(calM<0){ calM+=12; calY--; } while(calM>11){ calM-=12; calY++; } drawCal(); }
+ $('calPrev').onclick=function(){ moveCal(-1); };
+ $('calNext').onclick=function(){ moveCal(1); };
+ $('calPrevY').onclick=function(){ calY--; drawCal(); };
+ $('calNextY').onclick=function(){ calY++; drawCal(); };
+ $('calGrid').onclick=function(e){ var v=e.target.getAttribute('data-day'); if(v) pickDate(v); };
+ $('calToday').onclick=function(){ pickDate(iso(0)); };
+ $('calClear').onclick=function(){ pickDate(''); };
+ $('calX').onclick=function(){ $('dcal').close(); };
+ ['d','rf','rt'].forEach(function(id){ dateField($(id)); });
  render(); connect();
 })();
 </script></body></html>
